@@ -1,0 +1,11 @@
+.container {
+  min-height: 500px;
+  width: 100%;
+  background-color: rgb(236, 236, 236);
+  display: flex;
+  justify-content: center;
+}
+
+.max-width {
+  width: 100%;
+}

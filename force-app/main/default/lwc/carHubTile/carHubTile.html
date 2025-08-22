@@ -1,0 +1,15 @@
+<template>
+    <div class="car-tile" onclick={handleCarClicked}>
+        <div class="car-image">
+            <img src={car.Picture_URL__c} alt="">
+        </div>
+        <div class="car-data">
+            <div class="car-name">
+                <div>{car.Name}</div>
+            </div>
+            <div class="car-mrsp">
+                <div>MSRP: USD {car.MSRP__c}</div>
+            </div>
+        </div>
+    </div>
+</template>

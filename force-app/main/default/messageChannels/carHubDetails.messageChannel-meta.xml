@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<LightningMessageChannel xmlns="https://soap.sforce.com/2006/04/metadata">
+    <masterLabel>Car Hub Details</masterLabel>
+    <isExposed>true</isExposed>
+    <description
+  >Message Channel to pass data from the carHubTileList Component to the carHubTile Component</description>
+    <lightningMessageFields>
+        <fieldName>lmsData</fieldName>
+        <description>This is the field to the game result</description>
+    </lightningMessageFields>
+</LightningMessageChannel>

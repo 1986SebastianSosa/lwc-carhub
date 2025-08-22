@@ -1,0 +1,37 @@
+<template>
+    <lightning-card title={carName} icon-name="custom:custom31">
+        <template lwc:if={recordId}>
+            <div slot="actions">
+                <lightning-button-icon icon-name="utility:expand_alt" alternative-text="Go to car record"
+                    title="Go to car record" onclick={handleNavigateToCarRecord}></lightning-button-icon>
+            </div>
+        </template>
+        <div class="slds-p-around_medium">
+            <template lwc:if={isLoading}>
+                <lightning-spinner alternative-text="Loading Cars" size="large"></lightning-spinner>
+            </template>
+            <template lwc:else>
+                <template lwc:if={recordId}>
+                    <div class="card-image">
+                        <img src={pictureURL} alt="">
+                    </div>
+                    <lightning-record-view-form record-id={recordId} object-api-name={objectApiName} density="compact">
+                        <lightning-output-field field-name="Category__c"></lightning-output-field>
+                        <lightning-output-field field-name="Brand__c"></lightning-output-field>
+                        <lightning-output-field field-name="MSRP__c"></lightning-output-field>
+                        <div class="other-features">
+                            <p>OTHER FEATURES</p>
+                        </div>
+                        <lightning-output-field field-name="Fuel_Type__c"></lightning-output-field>
+                        <lightning-output-field field-name="Number_of_Seats__c"></lightning-output-field>
+                        <lightning-output-field field-name="Control__c"></lightning-output-field>
+                        <lightning-output-field field-name="Description__c"></lightning-output-field>
+                    </lightning-record-view-form>
+                </template>
+                <template lwc:else>
+                    <c-car-hub-placeholder text="*No car selected"></c-car-hub-placeholder>
+                </template>
+            </template>
+        </div>
+    </lightning-card>
+</template>

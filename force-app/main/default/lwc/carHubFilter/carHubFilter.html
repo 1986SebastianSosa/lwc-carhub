@@ -1,0 +1,23 @@
+<template>
+    <lightning-card title="Filter" icon-name="standard:filter">
+        <div class="slds-p-around_medium">
+            <lightning-input label="Search" onchange={handleSearchInput} value={searchInputValue}></lightning-input>
+        </div>
+        <div class="slds-p-around_medium">
+            <lightning-slider label="Max Price" value={carPrice} max="999999" onchange={handlePrice}></lightning-slider>
+        </div>
+        <div class="slds-p-around_medium">
+            <template lwc:if={categories}>
+                <lightning-checkbox-group name="categories" label="Categories" options={categories}
+                    value={selectedCategories} onchange={handleCategories}></lightning-checkbox-group>
+            </template>
+        </div>
+        <div class="slds-p-around_medium">
+            <template lwc:if={brands}>
+                <lightning-checkbox-group name="brands" label="Brands" options={brands} value={selectedBrands}
+                    onchange={handleBrands}></lightning-checkbox-group>
+            </template>
+        </div>
+
+    </lightning-card>
+</template>

@@ -1,0 +1,27 @@
+<template>
+    <lightning-card hide-header icon-name="standard:lead_list">
+        <div class="container">
+            <!-- Spinner displayed during loading -->
+            <template lwc:if={isLoading}>
+                <lightning-spinner alternative-text="Loading Cars" size="large"></lightning-spinner>
+            </template>
+            <!-- Car grid, shown when not loading -->
+            <template lwc:else>
+                <lightning-layout multiple-rows class="max-width">
+                    <!-- Shows the Company Logo with a "No cars found message" -->
+                    <template lwc:if={noCars}>
+                        <c-car-hub-placeholder
+                            text="*There are no cars matching your curent filter selection"></c-car-hub-placeholder>
+                    </template>
+                    <template lwc:else>
+                        <template for:each={cars} for:item="car">
+                            <lightning-layout-item size="4" padding="around-small" key={car.Id}>
+                                <c-car-hub-tile car={car} oncarclicked={handleCarClicked}></c-car-hub-tile>
+                            </lightning-layout-item>
+                        </template>
+                    </template>
+                </lightning-layout>
+            </template>
+        </div>
+    </lightning-card>
+</template>

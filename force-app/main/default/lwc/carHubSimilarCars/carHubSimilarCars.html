@@ -1,0 +1,34 @@
+<template>
+    <lightning-card title="Similar Cars">
+        <div class="slds-p-around_medium">
+            <template lwc:if={isLoading}>
+                <lightning-spinner alternative-text="Loading Cars" size="large"></lightning-spinner>
+            </template>
+            <template lwc:else>
+                <template for:each={similarCars} for:item="similarCar">
+                    <div class="item-container" key={similarCar.Id}>
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="3">
+                                <div class="image">
+                                    <img src={similarCar.Picture_URL__c} alt="">
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="5">
+                                <div class="data">
+                                    <div class="name"><strong>{similarCar.Name}</strong></div>
+                                    <div class="msrp">USD{similarCar.MSRP__c}</div>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="4">
+                                <div class="button">
+                                    <lightning-button label="View Details" onclick={handleNavigateToSimilarCarRecord}
+                                        data-id={similarCar.Id}></lightning-button>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </div>
+                </template>
+            </template>
+        </div>
+    </lightning-card>
+</template>

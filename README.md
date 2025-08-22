@@ -24,14 +24,19 @@ CarHub is a Salesforce Lightning Web Components (LWC) application for browsing c
   - `carHubDetails__c`: Sends selected car ID from `CarHubTileList` to `CarHubCard`.
 
 ## Prerequisites
-- Salesforce org with **Experience Cloud** enabled (for UI deployment).
+- Salesforce org
 - User permissions for the `Car__c` custom object and its fields (`Name`, `Brand__c`, `Category__c`, `MSRP__c`, `Picture_URL__c`, `Fuel_Type__c`, `Number_of_Seats__c`, `Control__c`).
 - Salesforce CLI and VS Code for deployment.
+
+## Included Files
+- **car_records.csv**: CSV file containing sample `Car__c` records for testing the app.
+- **car_fields.docx**: Docx file detailing the `Car__c` object’s field definitions and schema.
+- **car_images.zip**: Zip file with car images to be uploaded as a Salesforce static resource for `Picture_URL__c` fallbacks.
 
 ## Setup Instructions
 1. **Clone the Repository**:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/1986SebastianSosa/lwc-carhub/
    cd carhub
     ```
 
@@ -46,15 +51,22 @@ CarHub is a Salesforce Lightning Web Components (LWC) application for browsing c
     sfdx force:source:deploy -p force-app
     ```
 3. **Configure the App**:
-- Ensure the Car__c custom object and fields are set up in your org.
+- Ensure the Car__c custom object and fields are set up in your org, as described in car_fields.docx.
 - Verify Field-Level Security (FLS) for all fields in the user’s profile.
 - Create the carHubFilters__c and carHubDetails__c message channels in Setup > Custom Metadata Types > Message Channel.
 
-4. **Add to Experience Cloud**:
+4. **Upload Static Resource**:
+-Upload the car_images.zip file static resource named "carhub_images" in Setup > Static Resources.
+
+5. **Import Car Data**:
+- Use Data Import Wizard or Salesforce CLI to import car_records.csv into the Car__c object
+- Ensure Picture_URL__c fields reference valid HTTPS URLs or static resource paths.
+
+6. **Add to Lightning App Page**:
 - Drag the CarHubFilter, CarHubTileList, and CarHubCard components onto an 3 section Lightning App Page.
 - Optionally, place CarHubSimilarCars near CarHubCard for related cars.
 
-5. **Test the App**:
+7. **Test the App**:
 - Create sample Car__c records with valid data (e.g., Picture_URL__c with HTTPS URLs).
 - Open the Experience Cloud page and test filtering, car selection, and navigation.
 
@@ -64,6 +76,80 @@ CarHub is a Salesforce Lightning Web Components (LWC) application for browsing c
 - Error Handling: User-friendly toast notifications (ShowToastEvent) instead of console logs for production readiness.
 - Modularity: LMS for decoupled component communication, with lean state management and reactive properties.
 - Scalability: Optimized data fetching (partial fields for lists, full fields for details) and clean lifecycle management.
+
+## Challenges Overcome
+- **Optimizing Data Fetching**: Initially fetched all `Car__c` fields for the list view, but switched to partial fields (`Id`, `Name`, `Picture_URL__c`, `MSRP__c`) in `CarHubTileList` and full fields on-demand in `CarHubCard`, reducing payload size and respecting governor limits.
+- **LMS Decoupling**: Faced issues with component communication; implemented LMS (`carHubFilters__c`, `carHubDetails__c`) to decouple `CarHubFilter` and `CarHubTileList`, ensuring scalability and modularity.
+- **UX with Async Data**: Added loading spinners in `CarHubTileList`, `CarHubCard`, and `CarHubSimilarCars` to handle asynchronous Apex and LDS calls, improving user experience during data fetching.
+- **Optimized LMS Communication**: Initially used a single message channel for all component communication, but introduced separate channels (`carHubFilters__c` for filter updates, `carHubDetails__c` for car selection) to reduce unnecessary processing in subscribing components, improving performance and modularity.
+
+## Project Structure
+```
+carhub/
+├── force-app/
+│   ├── main/
+│   │   ├── default/
+│   │   │   ├── lwc/
+│   │   │   │   ├── carHubFilter/
+│   │   │   │   │   ├── carHubFilter.js
+│   │   │   │   │   ├── carHubFilter.html
+│   │   │   │   │   ├── carHubFilter.css
+│   │   │   │   │   ├── carHubFilter.js-meta.xml
+│   │   │   │   ├── carHubTileList/
+│   │   │   │   │   ├── carHubTileList.js
+│   │   │   │   │   ├── carHubTileList.html
+│   │   │   │   │   ├── carHubTileList.css
+│   │   │   │   │   ├── carHubTileList.js-meta.xml
+│   │   │   │   ├── carHubTile/
+│   │   │   │   │   ├── carHubTile.js
+│   │   │   │   │   ├── carHubTile.html
+│   │   │   │   │   ├── carHubTile.css
+│   │   │   │   │   ├── carHubTile.js-meta.xml
+│   │   │   │   ├── carHubCard/
+│   │   │   │   │   ├── carHubCard.js
+│   │   │   │   │   ├── carHubCard.html
+│   │   │   │   │   ├── carHubCard.css
+│   │   │   │   │   ├── carHubCard.js-meta.xml
+│   │   │   │   ├── carHubSimilarCars/
+│   │   │   │   │   ├── carHubSimilarCars.js
+│   │   │   │   │   ├── carHubSimilarCars.html
+│   │   │   │   │   ├── carHubSimilarCars.css
+│   │   │   │   │   ├── carHubSimilarCars.js-meta.xml
+│   │   │   │   ├── carHubPlaceholder/
+│   │   │   │   │   ├── carHubPlaceholder.js
+│   │   │   │   │   ├── carHubPlaceholder.html
+│   │   │   │   │   ├── carHubPlaceholder.css
+│   │   │   │   │   ├── carHubPlaceholder.js-meta.xml
+│   │   │   ├── apex/
+│   │   │   │   ├── CarsController.cls
+│   │   │   │   ├── CarsController.cls-meta.xml
+│   │   │   ├── customMetadata/
+│   │   │   │   ├── carHubFilters__c.mdt
+│   │   │   │   ├── carHubDetails__c.mdt
+│   │   │   ├── objects/
+│   │   │   │   ├── Car__c/
+│   │   │   │   │   ├── Car__c.object-meta.xml
+│   │   │   │   │   ├── fields/
+│   │   │   │   │   │   ├── Name.field-meta.xml
+│   │   │   │   │   │   ├── Brand__c.field-meta.xml
+│   │   │   │   │   │   ├── Category__c.field-meta.xml
+│   │   │   │   │   │   ├── MSRP__c.field-meta.xml
+│   │   │   │   │   │   ├── Picture_URL__c.field-meta.xml
+│   │   │   │   │   │   ├── Fuel_Type__c.field-meta.xml
+│   │   │   │   │   │   ├── Number_of_Seats__c.field-meta.xml
+│   │   │   │   │   │   ├── Control__c.field-meta.xml
+│   │   │   ├── staticresources/
+│   │   │   │   ├── carImages.resource
+│   │   │   │   ├── carImages.resource-meta.xml
+│   ├── resources/
+│   │   ├── carhub_images.zip
+│   │   ├── Car_fields_and_relationship.docx
+│   │   ├── Car_data.scv
+├── README.md
+├── sfdx-project.json
+
+
+```
 
 ## Contact
 For questions or contributions, contact Sebastian Sosa at [1986SebastianSosa@gmail.com] (mailto:1986SebastianSosa@gmail.com) or though my [LinkedIn](https://www.linkedin.com/in/sebastian-sosa-cinotti/).

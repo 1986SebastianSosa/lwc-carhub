@@ -11,6 +11,13 @@ CarHub is a Salesforce Lightning Web Components (LWC) application for browsing c
 - **Responsive UX**: Includes loading spinners for asynchronous data fetching and user-friendly error handling via toast notifications.
 - **Production-Ready**: No console logs, secure data access with FLS enforcement, and optimized performance.
 
+## Screenshots
+
+![Full List](screenshots/carhub-1.png)
+![Filtered Cars](screenshots/carhub-2.png)
+![No Cars Found](screenshots/carhub-3.png)
+![Similar Cars](screenshots/carhub-4.png)
+
 ## Architecture
 - **Components**:
   - **CarHubFilter**: Allows users to input filter criteria (name, price, categories, brands) and publishes updates via LMS.
